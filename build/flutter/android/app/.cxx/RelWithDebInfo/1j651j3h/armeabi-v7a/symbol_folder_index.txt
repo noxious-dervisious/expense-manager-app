@@ -1,0 +1,1 @@
+C:\Users\ASUS\Desktop\expense-manager-app\build\flutter\build\app\intermediates\cxx\RelWithDebInfo\1j651j3h\obj\armeabi-v7a

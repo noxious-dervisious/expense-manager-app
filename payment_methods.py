@@ -1,6 +1,5 @@
 import flet as ft
 from datetime import datetime
-from utils import Utils
 from constants import *
 import logging
 from sql_utils import SQLiteUtils

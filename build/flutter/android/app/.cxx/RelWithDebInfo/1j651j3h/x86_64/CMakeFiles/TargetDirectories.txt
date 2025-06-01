@@ -1,0 +1,2 @@
+C:/Users/ASUS/Desktop/expense-manager-app/build/flutter/android/app/.cxx/RelWithDebInfo/1j651j3h/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/ASUS/Desktop/expense-manager-app/build/flutter/android/app/.cxx/RelWithDebInfo/1j651j3h/x86_64/CMakeFiles/rebuild_cache.dir
