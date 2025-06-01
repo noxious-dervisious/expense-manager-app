@@ -29,6 +29,7 @@ class Budget(SQLiteUtils):
             self.exclusion_list.remove(dropdown_value)
         if self.fetch_budgeting_tool(category=dropdown_value) != []:
             self.delete_budgeting_tool(category=dropdown_value)
+        self.__total_spend_value()
         self.budget_container.update()
 
     def __add_new_row(self):
