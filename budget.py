@@ -27,6 +27,8 @@ class Budget(SQLiteUtils):
         dropdown_value = self.rows[e.control.data].controls[0].value
         if dropdown_value is not None and dropdown_value != "":
             self.exclusion_list.remove(dropdown_value)
+        if self.fetch_budgeting_tool(category=dropdown_value) != []:
+            self.delete_budgeting_tool(category=dropdown_value)
         self.budget_container.update()
 
     def __add_new_row(self):
@@ -70,7 +72,10 @@ class Budget(SQLiteUtils):
                     "category" : budget.controls[0].value,
                     "spend_limit" : int(budget.controls[1].value)
                 }
-                self.insert_budgeting_tool(data["category"], data["spend_limit"])      
+                if self.fetch_budgeting_tool(category=data["category"]) == []:
+                    self.insert_budgeting_tool(data["category"], data["spend_limit"])
+                else:
+                    self.update_budgeting_tool(data["category"], spend_limit=data["spend_limit"])
 
         total_spend_limit = int(self.calculate_container.content.controls[0].value) if self.calculate_container.content.controls[0].value != "" and self.calculate_container.content.controls[0].value is not None else 0
         if self.fetch_budgeting_tool(category="total") != []:
@@ -97,7 +102,8 @@ class Budget(SQLiteUtils):
                                     label = "Spend Limit",
                                     input_filter=ft.NumbersOnlyInputFilter(),
                                     value = line_items["spend_limit"],
-                                    keyboard_type=ft.KeyboardType.NUMBER
+                                    keyboard_type=ft.KeyboardType.NUMBER,
+                                    on_change= lambda e: self.__total_spend_value(),
                                 ),
                                 ft.IconButton(
                                     icon=ft.Icons.REMOVE_CIRCLE_OUTLINE,
