@@ -65,36 +65,40 @@ class Track(SQLiteUtils):
         
         self.header.extend(self.category_progress_bar)
 
-        self.body = [
-            ft.Container(
-                content = ft.Column(
+        self.body = ft.Column(
                     [
-                        ft.Text(
-                            abs(investment["invested_value"]),
-                            weight=ft.FontWeight.BOLD,
-                            color=ft.Colors.BLACK,
-                            size=50,
-                            overflow=ft.TextOverflow.FADE,
-                            max_lines=1,
-                            # no_wrap=True,
-                        ),
-                        ft.Text(
-                            investment["name"],
-                            # expand=True,
+                        ft.DataTable(
+                            columns=[
+                                ft.DataColumn(ft.Text("Investment Name",weight=ft.FontWeight.BOLD)),
+                                ft.DataColumn(ft.Text("Invested Value",weight=ft.FontWeight.BOLD))
+                            ],
+                            rows=[
+                                ft.DataRow(
+                                    cells=[
+                                        ft.DataCell(
+                                            ft.Text(
+                                                investment["name"],
+                                                text_align=ft.TextAlign.CENTER,
+                                            )
+                                        ),
+                                        ft.DataCell(
+                                            ft.Text(
+                                                f"{abs(investment['invested_value'])}",
+                                                text_align=ft.TextAlign.CENTER,
+                                            )
+                                        )
+                                    ]
+                                ) for investment in investments
+                            ],
+                            expand=True,
+                            bgcolor=ft.Colors.AMBER_50,
                         )
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                     # expand=True,
                     # tight=True,
-                ),
-                border= ft.border.all(2,color=ft.Colors.BLACK),
-                padding=10,
-                border_radius=10,
-                bgcolor = ft.Colors.AMBER_50,
-                # expand= True,
-            ) for investment in investments
-        ]
+                )
 
         debt = self.run_query(
             "SELECT person,sum(price) as amount FROM transactions WHERE person != '' GROUP BY person",
@@ -114,6 +118,7 @@ class Track(SQLiteUtils):
                 ) for debt_item in debt
             ],
             expand=True,
+            bgcolor=ft.Colors.AMBER_50,
         )
         return ft.Column(
             controls=[
@@ -132,16 +137,9 @@ class Track(SQLiteUtils):
                 ft.Container(
                     content = ft.Column(
                         [
-                            ft.Text("Investment Management",weight=ft.FontWeight.BOLD,size=20),
+                            ft.Text("Investment Overview",weight=ft.FontWeight.BOLD,size=20),
                             ft.Text("Track your investments and their progress",size=15),
-                            ft.GridView(
-                                self.body,
-                                expand=1,
-                                runs_count=1,
-                                child_aspect_ratio=1.0,
-                                spacing=5,
-                                run_spacing=5,
-                            ),
+                            self.body
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -156,7 +154,7 @@ class Track(SQLiteUtils):
                 ft.Container(
                     content = ft.Column(
                         [
-                            ft.Text("Debt Management",weight=ft.FontWeight.BOLD,size=20),
+                            ft.Text("Debt Overview",weight=ft.FontWeight.BOLD,size=20),
                             ft.Text("Track your debts here",size=15),
                             self.debt_container
                         ],
@@ -166,7 +164,7 @@ class Track(SQLiteUtils):
                     ),
                     padding=10,
                     border_radius=5,
-                    bgcolor=ft.Colors.AMBER_50,
+                    # bgcolor=ft.Colors.AMBER_50,
                     border= ft.border.all(2,color=ft.Colors.BLACK),
                     expand=True,
                 ),
