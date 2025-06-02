@@ -74,7 +74,9 @@ class Track(SQLiteUtils):
                             weight=ft.FontWeight.BOLD,
                             color=ft.Colors.BLACK,
                             size=50,
-                            # expand=True,
+                            overflow=ft.TextOverflow.FADE,
+                            max_lines=1,
+                            # no_wrap=True,
                         ),
                         ft.Text(
                             investment["name"],
@@ -135,7 +137,7 @@ class Track(SQLiteUtils):
                             ft.GridView(
                                 self.body,
                                 expand=1,
-                                runs_count=2,
+                                runs_count=1,
                                 child_aspect_ratio=1.0,
                                 spacing=5,
                                 run_spacing=5,

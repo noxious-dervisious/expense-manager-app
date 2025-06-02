@@ -37,14 +37,14 @@ class Overview(SQLiteUtils):
         self.total_spent = ft.Text(
                     value = abs(value[0]),
                     weight= ft.FontWeight.BOLD,
-                    size= min(self.page.width*0.2,100),
+                    size= min(self.page.width*0.2,50),
                     expand=True,
                     color=ft.Colors.RED,
                 )
         self.total_earned = ft.Text(
                     value = abs(value[1]),
                     weight= ft.FontWeight.BOLD,
-                    size= min(self.page.width*0.2,100),
+                    size= min(self.page.width*0.2,50),
                     expand=True,
                     color=ft.Colors.GREEN,
                 )
