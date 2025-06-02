@@ -69,8 +69,8 @@ class Track(SQLiteUtils):
                     [
                         ft.DataTable(
                             columns=[
-                                ft.DataColumn(ft.Text("Investment Name",weight=ft.FontWeight.BOLD)),
-                                ft.DataColumn(ft.Text("Invested Value",weight=ft.FontWeight.BOLD))
+                                ft.DataColumn(ft.Text("Name",weight=ft.FontWeight.BOLD)),
+                                ft.DataColumn(ft.Text("Value",weight=ft.FontWeight.BOLD))
                             ],
                             rows=[
                                 ft.DataRow(
@@ -78,13 +78,13 @@ class Track(SQLiteUtils):
                                         ft.DataCell(
                                             ft.Text(
                                                 investment["name"],
-                                                text_align=ft.TextAlign.CENTER,
+                                                # text_align=ft.TextAlign.CENTER,
                                             )
                                         ),
                                         ft.DataCell(
                                             ft.Text(
                                                 f"{abs(investment['invested_value'])}",
-                                                text_align=ft.TextAlign.CENTER,
+                                                # text_align=ft.TextAlign.CENTER,
                                             )
                                         )
                                     ]
