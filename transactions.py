@@ -93,7 +93,7 @@ class Transactions(SQLiteUtils):
                 "kind" : list(self.transaction_type.selected)[0],
             }
         data["bank_id"] = self.generate_id(data["bank"],data["mode"])
-        data["cashback"] = abs(self.query_payment_methods(id=data["bank_id"])[0]["cashback"] * data["price"])/100
+        data["cashback"] = abs(self.query_payment_methods(id=data["bank_id"])[0]["cashback"] * data["price"])/100 if data["kind"] == "-" else 0
         old_price = self.fetch_transactions(id=data["id"])[0]["price"]
         self.update_transaction(data)
 
@@ -411,7 +411,7 @@ class Transactions(SQLiteUtils):
                 "kind" : list(self.transaction_type.selected)[0],
             }
         data["bank_id"] = self.generate_id(data["bank"],data["mode"])
-        data["cashback"] = abs(self.query_payment_methods(id=data["bank_id"])[0]["cashback"] * data["price"])/100
+        data["cashback"] = abs(self.query_payment_methods(id=data["bank_id"])[0]["cashback"] * data["price"])/100 if data["kind"] == "-" else 0
         self.insert_transaction(data)
 
         if data["recurring"]:
