@@ -140,6 +140,13 @@ def main(page: ft.Page):
                             scroll=ft.ScrollMode.HIDDEN,
                         ),
                         data_container,
+                        ft.Row(
+                            [
+                                ft.Container(
+                                    height=50
+                                ),
+                            ]
+                        ),
                     ],
                     scroll=ft.ScrollMode.AUTO,
                 )

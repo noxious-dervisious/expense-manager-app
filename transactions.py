@@ -12,6 +12,14 @@ class Transactions(SQLiteUtils):
         self.transactions_table =None
         self.exclude_list = [ col["name"] for col in TRANSACTION_FIELD_NAMES if not col["to_show"] ]
         self.include_list = [ col["name"] for col in TRANSACTION_FIELD_NAMES if col["to_show"] ]
+        self.category_dropdown = ft.Dropdown(
+            options=[ft.DropdownOption("All")] + [
+                ft.DropdownOption(dt) for dt in self.fetch_categories()
+            ],
+            expand=True,
+            label="Categories",
+            on_change= lambda e: self.view_transaction(external=True),
+        )
 
     def public_transactions_file(self):
         return self.fetch_transactions()
@@ -45,8 +53,7 @@ class Transactions(SQLiteUtils):
             )
 
         self.delete_transaction(idx)
-        self.page.views[-1].controls[-1].content=self.view_transaction()
-
+        self.page.views[-1].controls[-2].content=self.view_transaction()
         self.page.update()
     
     def __edit_entry(self,idx,data):
@@ -133,7 +140,7 @@ class Transactions(SQLiteUtils):
             )
         
         self.page.close(self.edit_transaction_dialogue_box)
-        self.page.views[-1].controls[-1].content = self.view_transaction()
+        self.page.views[-1].controls[-2].content = self.view_transaction()
         self.page.update()
 
     def  __open_edit_dialogue_box(self,idx,data):
@@ -305,7 +312,10 @@ class Transactions(SQLiteUtils):
                 return ft.Colors.GREEN_100
             else:
                 return ft.Colors.RED_100
-        transactions = self.fetch_transactions()
+        if self.category_dropdown.value is None or self.category_dropdown.value == "All":
+            transactions = self.fetch_transactions()
+        else:
+            transactions = self.fetch_transactions(category=self.category_dropdown.value)
         if transactions == []:
             column_name = [col["name"] for col in TRANSACTION_FIELD_NAMES if col not in self.exclude_list and col["to_show"]]
         else:
@@ -445,7 +455,7 @@ class Transactions(SQLiteUtils):
                 balance = self.query_payment_methods(id=payment_id_1)[0]["balance"] - data["price"],
             )
         self.page.close(self.record_transaction_dialogue_box)
-        self.page.views[-1].controls[-1].content = self.view_transaction()
+        self.page.views[-1].controls[-2].content = self.view_transaction()
         self.page.update()
 
     
@@ -651,7 +661,7 @@ class Transactions(SQLiteUtils):
         self.page.open(self.record_transaction_dialogue_box)
     
 
-    def view_transaction(self):
+    def view_transaction(self,external = False):
         self.start,self.end = self.load_start_end_date()
         self.transactions_table = ft.Container(ft.Row(
                 alignment =ft.MainAxisAlignment.CENTER,
@@ -684,6 +694,7 @@ class Transactions(SQLiteUtils):
                                     expand = True,
                                     tight = True
                                 ),
+                                self.category_dropdown,
                                 ft.Row([self.___view_transactions()],scroll=ft.ScrollMode.HIDDEN)
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
@@ -692,6 +703,9 @@ class Transactions(SQLiteUtils):
                     )
                 ],
             ))
+        if external == True:
+            self.page.views[-1].controls[-2].content = self.view_transaction()
+            self.page.update()
         return self.transactions_table
     
         

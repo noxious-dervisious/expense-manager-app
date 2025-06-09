@@ -34,6 +34,54 @@ class Track(SQLiteUtils):
         investments = self.fetch_investment()
         spent = self.calculate_current_category()
         limit = self.calculate_spend_limit()
+        spent_value = abs(sum([spent[dt] for dt in limit.keys() if dt != "total" and limit[dt] != 0]))
+        limit_value = sum([v for k,v in limit.items() if k != "total"])
+        self.total_progress_tab = [ft.Container(
+            content=ft.Column(
+                [
+                    ft.Row(
+                        [
+                            ft.Text(
+                                value = limit_value-spent_value,
+                                weight= ft.FontWeight.BOLD,
+                                size= min(self.page.width*0.1,50),
+                                expand=True,
+                                color="#000000",
+                            ),
+                            ft.Text(
+                                value = "of",
+                                weight= ft.FontWeight.BOLD,
+                                size= min(self.page.width*0.2,25),
+                                expand=True,
+                                color="#6E6D6D44",
+                                text_align=ft.TextAlign.END
+                            ),
+                            ft.Text(
+                                value = limit_value,
+                                weight= ft.FontWeight.BOLD,
+                                size= min(self.page.width*0.1,50),
+                                expand=True,
+                                color="#000000",
+                            )
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                        scroll=ft.ScrollMode.HIDDEN
+                    ),
+                    ft.Text(
+                        "Total Left",color="#000000",weight=ft.FontWeight.BOLD
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                scroll=ft.ScrollMode.HIDDEN
+            ),
+            border=ft.border.all(2, "#060B0C"),
+            border_radius=10,
+            padding=10,
+            alignment=ft.alignment.center,
+            bgcolor="#FFFFFF"
+        )]
         self.category_progress_bar = [ 
             ft.Column(
                 controls=[
@@ -62,7 +110,7 @@ class Track(SQLiteUtils):
                 color=ft.Colors.BLACK,
                 size=25,
             )]
-        
+        self.header.extend(self.total_progress_tab)
         self.header.extend(self.category_progress_bar)
 
         self.body = ft.Column(

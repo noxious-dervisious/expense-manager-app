@@ -48,6 +48,27 @@ class Overview(SQLiteUtils):
                     expand=True,
                     color=ft.Colors.GREEN,
                 )
+        self.left = ft.Text(
+                    value = abs(value[1]) - abs(value[0]),
+                    weight= ft.FontWeight.BOLD,
+                    size= min(self.page.width*0.2,50),
+                    expand=True,
+                    color="#522DB6",
+                )
+        self.total_left_box = ft.Container(ft.Column(
+                    [
+                        self.left,
+                        ft.Text("Total Remaining",color="#522DB6",weight=ft.FontWeight.BOLD)
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    expand=True
+                ),
+                border=ft.border.all(2, "#522DB6"),
+                border_radius=10,
+                padding=10,
+                alignment=ft.alignment.center,
+                bgcolor="#B8A5FC"
+            )
         self.total_spend_box = ft.Container(ft.Column(
                     [
                         self.total_spent,
@@ -112,6 +133,7 @@ class Overview(SQLiteUtils):
             scroll=ft.ScrollMode.HIDDEN,
         )
         return ft.Column([
+                        self.total_left_box,
                         self.total_spend_box,
                         self.total_earned_box,
                         self.bank_balance,
