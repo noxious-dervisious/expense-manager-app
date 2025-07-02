@@ -154,10 +154,15 @@ class Settings(SQLiteUtils):
     
     def __save_profile_info(self):
         profile = {} if self.fetch_profile() == [] else self.fetch_profile()[0]
-        profile["user_id"] = self.generate_uuid()
-        profile["name"] = self.name.value
-        profile["salary_day"] = int(self.salary_text.value)
-        self.insert_profile(profile["name"], profile["salary_day"], profile["user_id"])
+        if profile == {}:
+            profile["user_id"] = self.generate_uuid()
+            profile["name"] = self.name.value
+            profile["salary_day"] = int(self.salary_text.value)
+            self.insert_profile(profile["name"], profile["salary_day"], profile["user_id"])
+        else:
+            profile["name"] = self.name.value
+            profile["salary_day"] = int(self.salary_text.value)
+            self.update_profile(profile["user_id"], name = profile["name"], salary_day = profile["salary_day"])
         self.salary_text.disabled = True
         self.salary_text.update()
         
