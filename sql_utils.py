@@ -758,7 +758,7 @@ class SQLiteUtils():
         try:
             self.cursor = self.conn.cursor()
             if params is None:
-                self.cursor.execute(query)
+                self.cursor.execute(query, ())
             else:
                 self.cursor.execute(query, params)
             if fetch:

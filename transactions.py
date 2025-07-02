@@ -313,7 +313,10 @@ class Transactions(SQLiteUtils):
             else:
                 return ft.Colors.RED_100
         if self.category_dropdown.value is None or self.category_dropdown.value == "All":
-            transactions = self.fetch_transactions()
+            # transactions = self.fetch_transactions()
+            transactions = self.run_query("""
+                SELECT * FROM transactions WHERE date BETWEEN ? AND ? ORDER BY date DESC
+            """, (self.start, self.end), fetch=True)
         else:
             transactions = self.fetch_transactions(category=self.category_dropdown.value)
         if transactions == []:

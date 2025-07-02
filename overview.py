@@ -23,7 +23,7 @@ class Overview(SQLiteUtils):
             price = transaction["price"]
             if start <= datetime.datetime.strptime(transaction["date"],"%Y-%m-%d").date() <= end and transaction["kind"] == '-':
                 spent += price
-            elif start <= datetime.datetime.strptime(transaction["date"],"%Y-%m-%d").date() <= end and transaction["kind"] == '+':
+            elif start <= datetime.datetime.strptime(transaction["date"],"%Y-%m-%d").date() <= end and transaction["kind"] == '+' and transaction["mode"] != "Credit Card":
                 earned += price
             else:
                 continue

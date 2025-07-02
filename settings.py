@@ -35,7 +35,7 @@ class Settings(SQLiteUtils):
                 updated_price = investment.get("invested_value",0) + data["price"]
                 self.insert_investment(name=data["vendor"],invested_value=updated_price)
         
-        if list(self.transaction_type.selected)[0] != 'x':
+        if data['kind'] != 'x':
             self.update_payment_method(
                 payment_method_id= data["bank_id"],
                 balance = self.query_payment_methods(id=data["bank_id"])[0]["balance"] + data["price"],
