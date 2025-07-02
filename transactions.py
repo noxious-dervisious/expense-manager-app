@@ -665,7 +665,20 @@ class Transactions(SQLiteUtils):
     
 
     def view_transaction(self,external = False):
-        self.start,self.end = self.load_start_end_date()
+        def change_start_end_time(delta:int):
+            self.start = datetime.datetime(
+                day=self.start.day,
+                month=self.start.month+delta,
+                year=self.start.year
+            ).date()
+            self.end = datetime.datetime(
+                day=self.end.day,
+                month=self.end.month+delta,
+                year=self.end.year
+            ).date()
+            self.view_transaction(external=True)
+        if external == False:
+            self.start,self.end = self.load_start_end_date()
         self.transactions_table = ft.Container(ft.Row(
                 alignment =ft.MainAxisAlignment.CENTER,
                 vertical_alignment = ft.CrossAxisAlignment.CENTER,
@@ -678,6 +691,10 @@ class Transactions(SQLiteUtils):
                             controls= [
                                 ft.Row(
                                     [
+                                        ft.IconButton(
+                                            icon =ft.Icons.ARROW_BACK_SHARP,  
+                                            on_click=lambda e: change_start_end_time(-1)
+                                        ),
                                         ft.Text(
                                             value=f"{self.start}",
                                             text_align=ft.TextAlign.CENTER,
@@ -690,7 +707,11 @@ class Transactions(SQLiteUtils):
                                             text_align=ft.TextAlign.CENTER,
                                             weight=ft.FontWeight.BOLD,
                                             size=20,
-                                        )
+                                        ),
+                                        ft.IconButton(
+                                            icon =ft.Icons.ARROW_FORWARD_SHARP,
+                                            on_click=lambda e: change_start_end_time(1)
+                                        ),
                                     ],
                                     alignment=ft.MainAxisAlignment.CENTER,
                                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
@@ -707,7 +728,7 @@ class Transactions(SQLiteUtils):
                 ],
             ))
         if external == True:
-            self.page.views[-1].controls[-2].content = self.view_transaction()
+            self.page.views[-1].controls[-2].content = self.transactions_table
             self.page.update()
         return self.transactions_table
     
